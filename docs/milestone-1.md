@@ -1,6 +1,5 @@
-# Team Name: Telesto
-
-# Application Name: Medication Monitor
+Team Name: Telesto
+Application Name: Medication Monitor
 
 # Team Overview
 Eric Wu
