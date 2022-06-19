@@ -45,7 +45,12 @@
     margin-top: 2%;
 }
 
-#add-button {
+.form-button {
     font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+/* CSS for remove form */
+#remove-form-holder {
+    background-color: lightsteelblue;
 }
