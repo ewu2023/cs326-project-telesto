@@ -2,3 +2,16 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }
+
+#schedule {
+    margin-top: 2%;
+    width: 100%;
+    border: 1px solid black;
+}
+
+.day {
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid black;
+    background-color: lightgray;
+}
