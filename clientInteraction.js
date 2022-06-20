@@ -65,4 +65,10 @@ document.getElementById("add-button").addEventListener("click", () => {
     schedule.addMedication(curForm.name, curForm.days);
 });
 
+// Add event listener for remove button 
+document.getElementById("remove-button").addEventListener("click", () => {
+    const medName = document.getElementById("med-to-remove").value;
+    schedule.removeMedication(medName);
+});
+
 initClient();

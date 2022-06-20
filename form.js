@@ -46,7 +46,6 @@ export class Form {
         for (let i = 0; i < buttons.length; ++i) {
             let curBtn = buttons[i];
             let curDay = (curBtn.id).substring(0, 3);
-            console.log(curDay);
             if (curDay === "dai") {
                 if (curBtn.checked) {
                     this.days = {

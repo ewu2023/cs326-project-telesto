@@ -16,6 +16,11 @@
     background-color: lightgray;
 }
 
+.schedule-cell {
+    text-align: center;
+    border: 1px solid black;
+}
+
 /* CSS for Add form */
 #add-form-holder {
     background-color: lightblue;

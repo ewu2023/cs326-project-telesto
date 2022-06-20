@@ -34,7 +34,7 @@ export class Schedule {
                     curRow.appendChild(curCell);
                 } else {
                     const curCell = document.createElement("td");
-                    curCell.classList.add("table-cell");
+                    curCell.classList.add("schedule-cell");
                     let curMed = this.grid[i][j];
                     
                     // Update contents of current cell 
@@ -87,7 +87,6 @@ export class Schedule {
             }
         }
         this.grid[this.grid.length] = newRow;
-        console.log(this.grid);
     }
 
     /**
@@ -102,5 +101,23 @@ export class Schedule {
                 }
             }
         }
+
+        console.log(this.grid);
+        // Check for null rows
+        for (let i = 1; i < this.grid.length; ++i) {
+            let curRow = this.grid[i];
+            let nullCount = curRow.reduce(function(acc, elem) {
+                if (elem === null) {
+                    acc += 1;
+                }
+                return acc;
+            }, 0);
+            console.log(nullCount);
+            if (nullCount === 7) {
+                this.grid.splice(i, 1);
+            }
+        }
+
+        console.log(this.grid);
     }
 }
