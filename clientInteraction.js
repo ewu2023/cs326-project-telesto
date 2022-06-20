@@ -1,3 +1,8 @@
+import { Form } from "./form.js";
+import { Schedule } from "./schedule.js"
+
+const schedule = new Schedule();
+
 // Get each element of the UI
 const schedule_holder = document.getElementById("schedule-holder");
 const addForm_holder = document.getElementById("add-form-holder");
@@ -29,6 +34,7 @@ function toggleScreen(screenIdx, screens) {
 
 document.getElementById("schedule-toggle").addEventListener("click", () => {
     toggleScreen(0, ui_screens);
+    schedule.render(document.getElementById("schedule"));
 });
 
 document.getElementById("add-toggle").addEventListener("click", () => {
@@ -37,6 +43,26 @@ document.getElementById("add-toggle").addEventListener("click", () => {
 
 document.getElementById("remove-toggle").addEventListener("click", () => {
     toggleScreen(2, ui_screens);
+});
+
+// Add event listener for add button in Add Form
+document.getElementById("add-button").addEventListener("click", () => {
+    // Get form elements 
+    const medName = document.getElementById("med-name").value;
+    const exp_date = document.getElementById("exp-date").value;
+    const refill_date = document.getElementById("refill-date");
+    const num_refills = document.getElementById("num-refills").value;
+    const notes = document.getElementById("notes").value;
+    const dayButtonContainer = document.getElementById("day-buttons-container");
+
+    let curForm = new Form();
+    curForm.setName(medName);
+    curForm.setExpirationDate(exp_date).setRefillDate(refill_date);
+    curForm.setNotes(notes);
+    curForm.setDays(dayButtonContainer);
+
+    // Update schedule with information
+    schedule.addMedication(curForm.name, curForm.days);
 });
 
 initClient();

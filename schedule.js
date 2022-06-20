@@ -40,9 +40,9 @@ export class Schedule {
                     // Update contents of current cell 
                     if (curMed) {
                         // Add a checkbox button
-                        const takenBtn = _createCheckbox(curMed);
-                        curCell.appendChild(takenBtn.label);
+                        const takenBtn = this._createCheckbox(curMed);
                         curCell.appendChild(takenBtn.button);
+                        curCell.appendChild(takenBtn.label);
                     } else {
                         curCell.innerText = "";
                     }
@@ -86,7 +86,8 @@ export class Schedule {
                 newRow.push(null);
             }
         }
-        this.grid[this.grind.length] = newRow;
+        this.grid[this.grid.length] = newRow;
+        console.log(this.grid);
     }
 
     /**

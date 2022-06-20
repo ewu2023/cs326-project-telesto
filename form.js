@@ -32,37 +32,38 @@ export class Form {
     setDays(days) {
         // Get the buttons from the container
         const dayButtons = days.getElementsByTagName("*");
-
+        
         // Get buttons
-        const buttons = dayButtons.reduce(acc, element => {
-            let curTag = element.tagName;
-            if (curTag === "input") {
-                acc.push(element);
+        const buttons = [];
+        for (let i in dayButtons) {
+            let curElement = dayButtons[i];
+            if (curElement.tagName === "INPUT") {
+                buttons.push(curElement);
             }
-            return acc;
-        }, []);
+        }
 
         // Iterate over each button and check if it was checked
         for (let i = 0; i < buttons.length; ++i) {
             let curBtn = buttons[i];
             let curDay = (curBtn.id).substring(0, 3);
-            
-            if (curDay === "daily") {
-                this.days = {
-                    sun: true,
-                    mon: true,
-                    tue: true,
-                    wed: true,
-                    thr: true,
-                    fri: true,
-                    sat: true
-                };
-                break;
+            console.log(curDay);
+            if (curDay === "dai") {
+                if (curBtn.checked) {
+                    this.days = {
+                        sun: true,
+                        mon: true,
+                        tue: true,
+                        wed: true,
+                        thr: true,
+                        fri: true,
+                        sat: true
+                    };
+                    break;
+                }
             } else {
                 this.days[curDay] = curBtn.checked;
             }
         }
-        
         return this;
     }
 }
