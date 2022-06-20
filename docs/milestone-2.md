@@ -10,3 +10,6 @@ This is the first version of the add medication form. Users will be able to ente
 
 ![remove_medication](remove_med_ui.PNG)
 This is the first version of the remove medication form. Users will be able to enter a medication they wish to remove from their schedule here.
+
+# Video Demonstration
+https://www.loom.com/share/309227f9d3d64e8997008ed53be59297
