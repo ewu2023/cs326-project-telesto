@@ -1,4 +1,4 @@
-import { Form } from "./form.js";
+import { Medication } from "./medication.js";
 import { Schedule } from "./schedule.js"
 
 const schedule = new Schedule();
@@ -55,14 +55,14 @@ document.getElementById("add-button").addEventListener("click", () => {
     const notes = document.getElementById("notes").value;
     const dayButtonContainer = document.getElementById("day-buttons-container");
 
-    let curForm = new Form();
-    curForm.setName(medName);
-    curForm.setExpirationDate(exp_date).setRefillDate(refill_date);
-    curForm.setNotes(notes);
-    curForm.setDays(dayButtonContainer);
+    let curMed = new Medication();
+    curMed.setName(medName);
+    curMed.setExpirationDate(exp_date).setRefillDate(refill_date);
+    curMed.setNotes(notes);
+    curMed.setDays(dayButtonContainer);
 
     // Update schedule with information
-    schedule.addMedication(curForm.name, curForm.days);
+    schedule.addMedication(curMed.name, curMed.days);
 });
 
 // Add event listener for remove button 

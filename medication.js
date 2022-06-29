@@ -1,4 +1,4 @@
-export class Form {
+export class Medication {
     constructor() {
         this.name = "";
         this.exp_date = "";
