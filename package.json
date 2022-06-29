@@ -1,0 +1,22 @@
+{
+  "name": "medication-monitor",
+  "version": "1.0.0",
+  "description": "A web app that can be used to help keep track of one's medications",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ewu2023/cs326-project-telesto.git"
+  },
+  "author": "Eric Wu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ewu2023/cs326-project-telesto/issues"
+  },
+  "homepage": "https://github.com/ewu2023/cs326-project-telesto#readme"
+}
