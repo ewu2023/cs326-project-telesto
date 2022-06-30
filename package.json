@@ -2,7 +2,7 @@
   "name": "medication-monitor",
   "version": "1.0.0",
   "description": "A web app that can be used to help keep track of one's medications",
-  "main": "index.js",
+  "type": "module",
   "directories": {
     "doc": "docs"
   },
