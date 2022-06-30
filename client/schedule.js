@@ -14,6 +14,23 @@ export class Schedule {
         this.grid[0] = this.daysOfWeek;
     }
 
+    // Fetch medication and days from database
+    // Update schedule to reflect what is in the database
+    async update() {
+        // Retrieve medication and days information from db
+        const res = await fetch("/schedule", {
+            method: 'GET'
+        });
+        
+        // Get JSON from body
+        const schedule_info = await res.json();
+
+        // Update grid to reflect information from db
+        for (let med in schedule_info) {
+            this.addMedication(med, schedule_info[med]);
+        }
+    }
+
     render(table) {
         // Re-render schedule when an update occurs
         table.innerHTML = '';

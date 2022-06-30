@@ -9,7 +9,7 @@ const addForm_holder = document.getElementById("add-form-holder");
 const removeForm_holder = document.getElementById("remove-form-holder");
 const ui_screens = [schedule_holder, addForm_holder, removeForm_holder];
 
-function initClient() {
+async function initClient() {
     ui_screens.forEach(screen => {
         screen.style.display = "none";
         screen.disabled = true;
@@ -17,6 +17,8 @@ function initClient() {
 
     schedule_holder.disabled = false;
     schedule_holder.style.display = "block";
+    await schedule.update();
+    schedule.render(document.getElementById("schedule"));
 }
 
 // Add event listeners to dashboard buttons
@@ -71,4 +73,4 @@ document.getElementById("remove-button").addEventListener("click", () => {
     schedule.removeMedication(medName);
 });
 
-initClient();
+await initClient();

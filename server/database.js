@@ -22,13 +22,15 @@ export class database {
   async init() {
     // Initialize the collection if it is not there, or retrieve it
     this.collection = this.db.collection('medications');
-
-    // Count how many documents are in the collection
-    this.docCount = await this.collection.countDocuments();
   }
 
   async close() {
     await this.client.close();
+  }
+
+  async countDocuments() {
+    const count = await this.collection.countDocuments();
+    return count;
   }
 
   async addMedication(med_obj) {
