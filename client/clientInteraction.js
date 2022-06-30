@@ -1,5 +1,6 @@
 import { Medication } from "./medication.js";
 import { Schedule } from "./schedule.js"
+import { addMedication } from "./crud.js";
 
 const schedule = new Schedule();
 
@@ -48,23 +49,35 @@ document.getElementById("remove-toggle").addEventListener("click", () => {
 });
 
 // Add event listener for add button in Add Form
-document.getElementById("add-button").addEventListener("click", () => {
+document.getElementById("add-button").addEventListener("click", async () => {
     // Get form elements 
     const medName = document.getElementById("med-name").value;
     const exp_date = document.getElementById("exp-date").value;
-    const refill_date = document.getElementById("refill-date");
+    const refill_date = document.getElementById("refill-date").value;
     const num_refills = document.getElementById("num-refills").value;
     const notes = document.getElementById("notes").value;
     const dayButtonContainer = document.getElementById("day-buttons-container");
 
-    let curMed = new Medication();
-    curMed.setName(medName);
-    curMed.setExpirationDate(exp_date).setRefillDate(refill_date);
-    curMed.setNotes(notes);
-    curMed.setDays(dayButtonContainer);
+    await addMedication(
+        medName,
+        refill_date,
+        exp_date,
+        num_refills,
+        notes,
+        dayButtonContainer
+    );
+
+    // Update schedule
+    await schedule.update();
+
+    // let curMed = new Medication();
+    // curMed.setName(medName);
+    // curMed.setExpirationDate(exp_date).setRefillDate(refill_date);
+    // curMed.setNotes(notes);
+    // curMed.setDays(dayButtonContainer);
 
     // Update schedule with information
-    schedule.addMedication(curMed.name, curMed.days);
+    // schedule.addMedication(curMed.name, curMed.days);
 });
 
 // Add event listener for remove button 
