@@ -9,6 +9,8 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(logger('dev'));
 
+app.use('/', express.static('client'))
+
 // Path for adding medication
 app.post("/addMedication", (req, res) => {
     // TODO: Call on database to store medication
