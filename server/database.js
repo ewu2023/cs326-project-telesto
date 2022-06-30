@@ -61,4 +61,9 @@ export class database {
     const res = await this.collection.find({}).toArray();
     return res;
   }
+
+  async getMedication(id) {
+    const res = await this.collection.findOne({_id: id});
+    return res;
+  }
 }
