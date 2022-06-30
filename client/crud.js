@@ -5,13 +5,15 @@ export async function addMedication(
    
     // Parse the day button information
     const days = _parseDays(dayBtnContainer);
+
+    let refill_count = num_refills === '' ? 0 : parseInt(num_refills);
     
     // Create document to store in mongodb
     const med_document = {
         "med-name": med_name,
         "refill-date": refill_date,
         "expiration-date": expiration_date,
-        "num-refills": parseInt(num_refills),
+        "num-refills": refill_count,
         "notes": notes,
         "days": days
     };
@@ -23,8 +25,24 @@ export async function addMedication(
             body: JSON.stringify(med_document)
         });
 
-        const statusMsg = await res.json();
-        console.log(statusMsg);
+        const db_response = await res.json();
+        return db_response;
+    } catch(err) {
+        console.error(err);
+    }
+}
+
+export async function deleteMedication(med_name) {
+    try {
+        const res = await fetch("/deleteMedication", {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ "med-name": med_name })
+        });
+        
+        const db_response = await res.json();
+        console.log(db_response);
+        return db_response;
     } catch(err) {
         console.error(err);
     }

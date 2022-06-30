@@ -38,8 +38,8 @@ export class database {
     return res;
   }
 
-  async deleteMedication(id) {
-    const res = await this.collection.deleteOne({_id: id});
+  async deleteMedication(med_name) {
+    const res = await this.collection.deleteOne({"med-name": med_name});
     return res;
   }
 

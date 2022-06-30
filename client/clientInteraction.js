@@ -1,6 +1,6 @@
 import { Medication } from "./medication.js";
 import { Schedule } from "./schedule.js"
-import { addMedication } from "./crud.js";
+import * as crudUtils from "./crud.js";
 
 const schedule = new Schedule();
 
@@ -9,6 +9,15 @@ const schedule_holder = document.getElementById("schedule-holder");
 const addForm_holder = document.getElementById("add-form-holder");
 const removeForm_holder = document.getElementById("remove-form-holder");
 const ui_screens = [schedule_holder, addForm_holder, removeForm_holder];
+
+// Get Add Form elements
+const med_text_box = document.getElementById("med-name");
+const exp_date_box = document.getElementById("exp-date");
+const refill_date_box = document.getElementById("refill-date");
+const num_refills_box = document.getElementById("num-refills");
+const notes_box = document.getElementById("notes");
+const dayButtonContainer = document.getElementById("day-buttons-container");
+const addConfirm = document.getElementById("add-confirm");
 
 async function initClient() {
     ui_screens.forEach(screen => {
@@ -42,48 +51,79 @@ document.getElementById("schedule-toggle").addEventListener("click", () => {
 
 document.getElementById("add-toggle").addEventListener("click", () => {
     toggleScreen(1, ui_screens);
+    addConfirm.innerHTML = '';
 });
 
 document.getElementById("remove-toggle").addEventListener("click", () => {
     toggleScreen(2, ui_screens);
+    document.getElementById("med-to-remove").value = '';
+    document.getElementById("delete-confirm").innerHTML = '';
 });
 
 // Add event listener for add button in Add Form
 document.getElementById("add-button").addEventListener("click", async () => {
     // Get form elements 
-    const medName = document.getElementById("med-name").value;
-    const exp_date = document.getElementById("exp-date").value;
-    const refill_date = document.getElementById("refill-date").value;
-    const num_refills = document.getElementById("num-refills").value;
-    const notes = document.getElementById("notes").value;
-    const dayButtonContainer = document.getElementById("day-buttons-container");
+    const medName = med_text_box.value;
+    const exp_date = exp_date_box.value;
+    const refill_date = refill_date_box.value;
+    const num_refills = num_refills_box.value;
+    const notes = notes_box.value;
 
-    await addMedication(
-        medName,
-        refill_date,
-        exp_date,
-        num_refills,
-        notes,
-        dayButtonContainer
-    );
+    // Check if required fields have been filled
+    if (medName === '' || exp_date === '' || refill_date === '') {
+        addConfirm.innerHTML = "<strong>Please ensure all fields in red are filled out.</strong>"
+    } else {
+        try {
+            const res = await crudUtils.addMedication(
+                medName,
+                refill_date,
+                exp_date,
+                num_refills,
+                notes,
+                dayButtonContainer
+            );
+            
+            if (res.acknowledged) {
+                addConfirm.innerHTML = `<strong>${medName} was added successfully.</strong>`
 
-    // Update schedule
-    await schedule.update();
+                // Clear all text boxes
+                med_text_box.value = '';
+                exp_date_box.value = '';
+                refill_date_box.value = '';
+                num_refills_box.value = '';
+                notes_box.value = '';
 
-    // let curMed = new Medication();
-    // curMed.setName(medName);
-    // curMed.setExpirationDate(exp_date).setRefillDate(refill_date);
-    // curMed.setNotes(notes);
-    // curMed.setDays(dayButtonContainer);
-
-    // Update schedule with information
-    // schedule.addMedication(curMed.name, curMed.days);
+                // Update schedule
+                await schedule.update();
+            } else {
+                addConfirm.innerHTML = `<strong>An error occurred while adding ${medName}</strong>`;
+            }
+        } catch(err) {
+            addConfirm.innerHTML = `<strong>An error occurred, please try again.</strong>`
+            console.error(err);
+        }
+    }
 });
 
 // Add event listener for remove button 
-document.getElementById("remove-button").addEventListener("click", () => {
+document.getElementById("remove-button").addEventListener("click", async () => {
+    // Get the name of the medication to remove
     const medName = document.getElementById("med-to-remove").value;
-    schedule.removeMedication(medName);
+    
+    // Wait for database to delete medication
+    try {
+        const res = await crudUtils.deleteMedication(medName);
+        if (res.deletedCount > 0) {
+            document.getElementById("med-to-remove").value = '';
+            document.getElementById("delete-confirm").innerHTML = `<strong>${medName} has been deleted</strong>`;
+            await schedule.update();
+        } else {
+            document.getElementById("delete-confirm").innerHTML = `<strong>${medName} does not exist</strong>`;
+        }
+    } catch(err) {
+        console.error(err);
+        document.getElementById("delete-confirm").innerHTML = `<strong>An error occurred while deleting ${medName}.`
+    }
 });
 
 await initClient();

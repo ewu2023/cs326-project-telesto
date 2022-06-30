@@ -22,16 +22,16 @@ await db.init();
 app.post("/addMedication", async (req, res) => {
     // TODO: Call on database to store medication
     const med = req.body;
-    await db.addMedication(med);
-    res.status(200).json({status: "success"});
+    const db_response = await db.addMedication(med);
+    res.status(200).json(db_response);
 });
 
 // Path for removing medication
 app.post("/deleteMedication", async (req, res) => {
     // TODO: Call on database to remove medication
-    const med_id = req.body;
-    await db.deleteMedication(med_id["_id"]);
-    res.status(200).json({status: "success"});
+    const med_name = req.body;
+    const db_response = await db.deleteMedication(med_name["med-name"]);
+    res.status(200).json(db_response);
 });
 
 // Path for retrieving schedule
@@ -60,8 +60,8 @@ app.get("/schedule", async (req, res) => {
 app.get("/notes", async (req, res) => {
     // TODO: Retrieve medication info + instructions from db
     try {
-        const med_id = req.body["_id"];
-        const med_data = await db.getMedication(med_id);
+        const med_name = req.body["med-name"];
+        const med_data = await db.getByName(med_name);
         res.status(200).json(med_data);
     } catch(err) {
         res.status(500).send(err);
