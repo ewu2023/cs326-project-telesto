@@ -48,6 +48,20 @@ export async function deleteMedication(med_name) {
     }
 }
 
+export async function readMedication(med_name) {
+    try {
+        const res = await fetch("/notes", {
+            method: 'GET',
+            headers: {"med-name": med_name}
+        });
+
+        const db_response = await res.json();
+        return db_response;
+    } catch(err) {
+        console.error(err);
+    }
+}
+
 /* Helpers */
 function _parseDays(container) {
     // Retrieve state of buttons

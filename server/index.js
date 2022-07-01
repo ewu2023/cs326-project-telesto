@@ -60,7 +60,7 @@ app.get("/schedule", async (req, res) => {
 app.get("/notes", async (req, res) => {
     // TODO: Retrieve medication info + instructions from db
     try {
-        const med_name = req.body["med-name"];
+        const med_name = req.header("med-name");
         const med_data = await db.getByName(med_name);
         res.status(200).json(med_data);
     } catch(err) {

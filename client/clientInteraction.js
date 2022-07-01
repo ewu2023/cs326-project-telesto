@@ -23,6 +23,7 @@ const addConfirm = document.getElementById("add-confirm");
 // Get Note search bar elements
 const search_box = document.getElementById("search-box");
 const search_btn = document.getElementById("search-btn");
+const search_result = document.getElementById("search-result");
 
 async function initClient() {
     ui_screens.forEach(screen => {
@@ -133,6 +134,21 @@ document.getElementById("remove-button").addEventListener("click", async () => {
     } catch(err) {
         console.error(err);
         document.getElementById("delete-confirm").innerHTML = `<strong>An error occurred while deleting ${medName}.`
+    }
+});
+
+search_btn.addEventListener("click", async () => {
+    const med_name = search_box.value;
+    if (med_name === '') {
+        search_result.innerHTML = `<strong>Invalid medication name<strong>`;
+    } else {
+        try {
+            const res = await crudUtils.readMedication(med_name);
+            // TODO: Create an editable form from the information taken from the database
+            // TODO: Save this information to local storage
+        } catch(err) {
+            search_result.innerHTML = `<strong>An error occurred while searching for ${med_name}</strong>`;
+        }
     }
 });
 
