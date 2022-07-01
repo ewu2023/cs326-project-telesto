@@ -1,5 +1,5 @@
-import { Medication } from "./medication.js";
-import { Schedule } from "./schedule.js"
+import * as medicationViewer from "./medication.js";
+import { Schedule } from "./schedule.js";
 import * as crudUtils from "./crud.js";
 
 const schedule = new Schedule();
@@ -145,8 +145,10 @@ search_btn.addEventListener("click", async () => {
         try {
             const res = await crudUtils.readMedication(med_name);
             // TODO: Create an editable form from the information taken from the database
+            medicationViewer.render(search_result, res);
             // TODO: Save this information to local storage
         } catch(err) {
+            console.error(err);
             search_result.innerHTML = `<strong>An error occurred while searching for ${med_name}</strong>`;
         }
     }

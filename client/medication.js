@@ -1,68 +1,52 @@
-export class Medication {
-    constructor() {
-        this.name = "";
-        this.exp_date = "";
-        this.refill_date = "";
-        this.num_refills = 0;
-        this.notes = "";
-        this.days = {};
+export function render(element, med_data) {
+    // Create an unordered list using the medication data
+    element.innerHTML = '';
+    const infoList = createList(med_data);
+    element.appendChild(infoList);
+}
+
+function createList(med_data) {
+    // Create an unordered list
+    const listElement = document.createElement("ul");
+
+    // Get the fields from the data
+    const field_to_data = {
+        "Medication Name": med_data["med-name"],
+        "Refill Date": med_data["refill-date"],
+        "Expiration Date": med_data["expiration-date"],
+        "# of Refills": med_data["num-refills"],
+        "Notes": med_data["notes"]
+    };
+
+    field_to_data["Days to Take"] = generateDayStr(med_data["days"]);
+
+    // Add items to the list
+    for (let field in field_to_data) {
+        // Create line of text to put in list
+        const curLine = `${field}: ${field_to_data[field]}`;
+        const listItem = document.createElement("li");
+
+        // Add item to list
+        listItem.innerText = curLine;
+        listElement.appendChild(listItem);
     }
 
-    // Setters
-    setName(name) {
-        this.name = name;
-        return this;
-    }
+    return listElement;
+}
 
-    setExpirationDate(exp_date) {
-        this.exp_date = exp_date;
-        return this;
-    }
-
-    setRefillDate(refill_date) {
-        this.refill_date = refill_date;
-        return this;
-    }
-
-    setNotes(notes) {
-        this.notes = notes;
-        return this;
-    }
-
-    setDays(days) {
-        // Get the buttons from the container
-        const dayButtons = days.getElementsByTagName("*");
-        
-        // Get buttons
-        const buttons = [];
-        for (let i in dayButtons) {
-            let curElement = dayButtons[i];
-            if (curElement.tagName === "INPUT") {
-                buttons.push(curElement);
-            }
+function generateDayStr(days) {
+    let dayArr = [];
+    let trueCount = 0;
+    for (let day in days) {
+        if (days[day]) {
+            dayArr.push(day);
+            trueCount += 1;
         }
-
-        // Iterate over each button and check if it was checked
-        for (let i = 0; i < buttons.length; ++i) {
-            let curBtn = buttons[i];
-            let curDay = (curBtn.id).substring(0, 3);
-            if (curDay === "dai") {
-                if (curBtn.checked) {
-                    this.days = {
-                        sun: true,
-                        mon: true,
-                        tue: true,
-                        wed: true,
-                        thr: true,
-                        fri: true,
-                        sat: true
-                    };
-                    break;
-                }
-            } else {
-                this.days[curDay] = curBtn.checked;
-            }
-        }
-        return this;
     }
+
+    if (trueCount === 7) {
+        return "Daily";
+    }
+
+    return dayArr.join(", ");
 }
