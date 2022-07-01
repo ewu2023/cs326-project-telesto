@@ -20,6 +20,17 @@ const notes_box = document.getElementById("notes");
 const dayButtonContainer = document.getElementById("day-buttons-container");
 const addConfirm = document.getElementById("add-confirm");
 
+const dayButtons = [
+    document.getElementById("daily-btn"),
+    document.getElementById("sun-btn"),
+    document.getElementById("mon-btn"),
+    document.getElementById("tue-btn"),
+    document.getElementById("wed-btn"),
+    document.getElementById("thr-btn"),
+    document.getElementById("fri-btn"),
+    document.getElementById("sat-btn")
+];
+
 // Get Note search bar elements
 const search_box = document.getElementById("search-box");
 const search_btn = document.getElementById("search-btn");
@@ -103,6 +114,7 @@ document.getElementById("add-button").addEventListener("click", async () => {
                 refill_date_box.value = '';
                 num_refills_box.value = '';
                 notes_box.value = '';
+                dayButtons.forEach((btn) => btn.checked = false);
 
                 // Update schedule
                 await schedule.update();
