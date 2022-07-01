@@ -8,7 +8,8 @@ const schedule = new Schedule();
 const schedule_holder = document.getElementById("schedule-holder");
 const addForm_holder = document.getElementById("add-form-holder");
 const removeForm_holder = document.getElementById("remove-form-holder");
-const ui_screens = [schedule_holder, addForm_holder, removeForm_holder];
+const notes_holder = document.getElementById("notes-holder");
+const ui_screens = [schedule_holder, addForm_holder, removeForm_holder, notes_holder];
 
 // Get Add Form elements
 const med_text_box = document.getElementById("med-name");
@@ -18,6 +19,10 @@ const num_refills_box = document.getElementById("num-refills");
 const notes_box = document.getElementById("notes");
 const dayButtonContainer = document.getElementById("day-buttons-container");
 const addConfirm = document.getElementById("add-confirm");
+
+// Get Note search bar elements
+const search_box = document.getElementById("search-box");
+const search_btn = document.getElementById("search-btn");
 
 async function initClient() {
     ui_screens.forEach(screen => {
@@ -58,6 +63,11 @@ document.getElementById("remove-toggle").addEventListener("click", () => {
     toggleScreen(2, ui_screens);
     document.getElementById("med-to-remove").value = '';
     document.getElementById("delete-confirm").innerHTML = '';
+});
+
+document.getElementById("notes-toggle").addEventListener("click", () => {
+    toggleScreen(3, ui_screens);
+    // TODO: load in previously searched item into the div
 });
 
 // Add event listener for add button in Add Form

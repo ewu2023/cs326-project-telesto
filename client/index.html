@@ -9,6 +9,7 @@
             <input type="button" class="dash-item" id="schedule-toggle" value="Schedule">
             <input type="button" class="dash-item" id="add-toggle" value="Add Medication">
             <input type="button" class="dash-item" id="remove-toggle" value="Remove Medication">
+            <input type="button" class="dash-item" id="notes-toggle" value="Medication Notes">
         </div>
 
         <!-- Table Section -->
@@ -109,8 +110,16 @@
 
         <!-- Notes -->
         <div id="notes-holder">
+            <form id="search-form">
+                <fieldset>
+                    <legend>Search</legend>
+                    <p> <label for="search-box">Enter Medication:</label> </p>
+                    <input type="text" id="search-box">
+
+                    <input type="button" id="search-btn" value="Search">
+                </fieldset>
+            </form>
             <!-- Populate with divs containing medication info -->
-            <!-- Could implement a medication class that stores info + renders each div-->
         </div>
     </body>
 </html>
