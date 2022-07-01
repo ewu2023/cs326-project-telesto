@@ -62,6 +62,47 @@ export async function readMedication(med_name) {
     }
 }
 
+export async function updateMedication(med_data) {
+    // Create JSON objects to send to database
+    const name_obj = {"med-name": med_data["med-name"]};
+    const updateFields = {
+        "refill-date": med_data["refill-date"],
+        "expiration-date": med_data["expiration-date"]
+    };
+
+    // Determine which optional fields were changed
+    const optionalFields = [
+        "num-refills",
+        "notes"
+    ];
+
+    const days = _parseDays(med_data["days"]);
+
+    optionalFields.forEach((field) => {
+        if (med_data[field] !== '') {
+            updateFields[field] = med_data[field]
+        }
+    });
+
+    if (days !== undefined) {
+        updateFields["days"] = days;
+    }
+
+    // Send objects to database to update
+    try {
+        const res = await fetch("/updateMedication", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify([name_obj, updateFields])
+        });
+
+        const db_response = await res.json();
+        return db_response;
+    } catch(err) {
+        console.error(err);
+    }
+}
+
 /* Helpers */
 function _parseDays(container) {
     // Retrieve state of buttons
@@ -77,6 +118,7 @@ function _parseDays(container) {
 
     // Initialize object to store mapping of days to boolean values
     let dayMap = {};
+    let falseCount = 0;
     
     // Populate the map
     let dailyBtn = buttons[0];
@@ -95,8 +137,13 @@ function _parseDays(container) {
             if (btn.id !== "daily-btn") {
                 const day = (btn.id).substring(0, 3);
                 dayMap[day] = btn.checked;
+                falseCount = !btn.checked ? falseCount + 1 : falseCount;
             }
         });
+    }
+
+    if (falseCount === 7) {
+        return undefined;
     }
 
     return dayMap;

@@ -72,9 +72,12 @@ app.get("/notes", async (req, res) => {
 app.post("/updateMedication", async (req, res) => {
     // TODO: Update given medication's information in db
     try {
-        const med_new_data = req.body;
-        const res_json = await db.updateMedication(med_new_data);
-        res.status(200).send(res_json);
+        // Re-implement
+        const med_data = req.body;
+        const target = med_data[0];
+        const fields = med_data[1];
+        const db_response = await db.updateMedication(target, fields);
+        res.status(200).json(db_response);
     } catch(err) {
         res.status(500).send(err);
     }

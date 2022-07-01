@@ -43,19 +43,11 @@ export class database {
     return res;
   }
 
-  async updateMedication(med_obj) {
-    const no_id = {};
-    for (let key in med_obj) {
-      if (key !== '_id') {
-        no_id[key] = med_obj[key];
-      }
-    }
-
+  async updateMedication(target, fields) {
     const res = await this.collection.updateOne(
-        {_id: med_obj["_id"]},
-        {$set: no_id}
+      target,
+      {$set: fields}
     );
-
     return res;
   }
 

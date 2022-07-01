@@ -128,6 +128,54 @@ document.getElementById("add-button").addEventListener("click", async () => {
     }
 });
 
+document.getElementById("update-button").addEventListener("click", async () => {
+    // Get form elements 
+    const medName = med_text_box.value;
+    const exp_date = exp_date_box.value;
+    const refill_date = refill_date_box.value;
+    const num_refills = num_refills_box.value;
+    const notes = notes_box.value;
+
+    // Check if required fields are filled
+    if (medName === '' || refill_date === '' || exp_date === '') {
+        addConfirm.innerHTML = "<strong>Please ensure all fields in red are filled out.</strong>"
+    } else {
+        // Create an object to encapsulate medication information from form
+        const med_data = {
+            "med-name": medName,
+            "refill-date": refill_date,
+            "expiration-date": exp_date,
+            "num-refills": num_refills,
+            "notes": notes,
+            "days": dayButtonContainer
+        };
+
+        // Wait for response from database
+        try {
+            const res = await crudUtils.updateMedication(med_data);
+            if (res.acknowledged && res.matchedCount > 0 && res.modifiedCount > 0) {
+                addConfirm.innerHTML = `<strong>${medName} was successfully updated.</strong>`
+                
+                // Clear all text boxes
+                med_text_box.value = '';
+                exp_date_box.value = '';
+                refill_date_box.value = '';
+                num_refills_box.value = '';
+                notes_box.value = '';
+                dayButtons.forEach((btn) => btn.checked = false);
+
+                // Update schedule
+                await schedule.update();
+            } else {
+                addConfirm.innerHTML = `<strong>${medName} does not exist.</strong>`;
+            }
+        } catch(err) {
+            addConfirm.innerHTML = `<strong>An error occurred while updating ${medName}.</strong>`;
+            console.error(err);
+        }
+    }
+});
+
 // Add event listener for remove button 
 document.getElementById("remove-button").addEventListener("click", async () => {
     // Get the name of the medication to remove
