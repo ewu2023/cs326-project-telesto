@@ -14,14 +14,12 @@ export class database {
     });
 
     this.client = await localClient.connect();
-    this.db = this.client.db('medications');
-
-    await this.init();
+    this.db = this.client.db('medication_database');
   }
 
-  async init() {
+  async init(collectionName) {
     // Initialize the collection if it is not there, or retrieve it
-    this.collection = this.db.collection('medications');
+    this.collection = this.db.collection(collectionName);
   }
 
   async close() {

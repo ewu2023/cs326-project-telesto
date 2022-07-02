@@ -3,20 +3,97 @@ import express from "express";
 import logger from "morgan";
 import { database } from "./database.js";
 
+// Authentication
+import users from "./users.js"
+import auth from "./auth.js"
+import expressSession from 'express-session';
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(dirname(__filename));
+
 const app = express();
 const port = process.env.PORT || 3000;
 
+const sessionConfig = {
+    secret: process.env.SECRET || 'SECRET',
+    resave: false,
+    saveUninitialized: false
+}
+
 // Attach middleware
+app.use(expressSession(sessionConfig));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: true}));
 app.use(logger('dev'));
 
-app.use('/', express.static('client'))
+app.use('/static', express.static('client'));
+
+function checkLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        res.redirect("/login");
+    }
+}
+
+auth.configure(app);
 
 // Initialize database
 const db = new database(process.env.DATABASE_URL);
 await db.connect();
-await db.init();
+
+// Path for routing to static content
+app.get("/", checkLoggedIn, async (req, res) => {
+    // Need to retrieve user medications from database
+    const curUser = req.user;
+    const uid = curUser["_id"].toString();
+    await db.init(uid);
+    res.redirect("/static");
+});
+
+// URL for login
+app.get("/login", (req, res) => {
+    res.sendFile("client/login.html", {root: __dirname});
+});
+
+// Path for handling logging in to site
+app.post(
+    "/login",
+    auth.authenticate('local', {
+        successRedirect: "/",
+        failureRedirect: "/login"
+    })
+);
+
+// Path for logging out of site
+app.get("/logout", (req, res, next) => {
+    // This structure is required as of passport ver. 0.6.0
+    // This version came out a few days after the Spring 2022 semester!
+    // Source: https://stackoverflow.com/questions/72336177/error-reqlogout-requires-a-callback-function
+    req.logout(function(err) {
+        if (err) {
+            return next(err);
+        }
+        res.redirect("/login");
+    });
+});
+
+app.get("/register", (req, res) => {
+    res.sendFile("client/register.html", {root: __dirname});
+});
+
+app.post("/register", (req, res) => {
+    const {username, password} = req.body;
+    // Attempt to add the user to the database
+    if (users.addUser(username, password)) {
+        // Redirect user to login page
+        res.redirect("/login");
+    } else {
+        res.redirect("/register");
+    }
+});
 
 // Path for adding medication
 app.post("/addMedication", async (req, res) => {
